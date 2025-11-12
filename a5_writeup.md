@@ -16,17 +16,16 @@ Assignment 5 can be broken up into the following parts:
 - Defines two different sets of initial moves for Sudoku puzzles
 - Uses both DFS and BFS to solve each puzzle and prints the results
 
-
-After completing the assignment, answer the following reflection questions:
-
 ## Reflection Questions
 
 1. What are some things that you learned through this assignment? Think about the concepts of backtracking, constraint satisfaction, and search algorithms. Were there any particular challenges you faced while implementing the Board class methods or the DFS/BFS functions? How did you overcome them?
 
-
+I learned how backtracking and constraint propagation help each other. By always choosing the most constrained cell, the search branches less and bad paths fail earlier. Implementing `update` made the biggest difference. A tricky part was realizing that every next move must be made on a deepcopy of the board. Otherwise, mutations leak across branches and corrupt the search. Overall, I saw how small details (deepcopy, correct pruning, and no hidden overrides) are affect search.
 
 2. How can you apply what you learned in this assignment to future programs or projects? Consider other types of problems that involve searching through possibilities, making decisions, and backtracking when those decisions don't work out. Can you think of real-world scenarios where DFS or BFS might be useful? What about other constraint satisfaction problems?
 
-
+The pattern of “choose a variable, choose a value, propagate constraints, backtrack on failure” generalizes to many things: crossword and kakuro fill‑ins, timetabling/scheduling (classes to rooms/time slots), register allocation in compilers, and simple logic puzzles. BFS is great when I want the shallowest solution (e.g shortest path in a graph like word ladders or network hops), and DFS is helpful when memory is tight or when solutions are likely deep. Adding a good variable/value ordering and propagation (like I did with most‑constrained and `update`) is a decent way to make brute‑force search scale better without heavy math.
 
 3. Explain how the Stack and Queue classes work and why they are important for DFS and BFS algorithms. Describe the difference between LIFO (Last In First Out) and FIFO (First In First Out) data structures. How does using a Stack versus a Queue change the way the search algorithm explores possible solutions? Why is one data structure better suited for depth-first search and the other for breadth-first search?
+
+A Stack is LIFO: the most recently pushed state is explored next. That naturally produces depth‑first traversal because we keep diving along the most recent branch until it fails or succeeds. A Queue is FIFO: the oldest state is explored next. The data structure controls exploration order: stack, deep first (lower memory, not guaranteed shortest), queue, level order (finds shallowest/shortest but can use more memory). Our `Stack` and `Queue` implementations are wrappers over Python lists with `push` and `pop` methods.
